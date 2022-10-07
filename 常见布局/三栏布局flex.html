@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三栏布局</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .warp {
+        display: flex;
+
+    }
+
+    .warp>div {
+        height: 500px;
+    }
+
+    .left {
+        order: 1;
+        width: 100px;
+        background-color: palevioletred;
+    }
+
+    .center {
+        flex: 1;
+        order: 2;
+        background-color: green;
+    }
+
+    .right {
+        order: 3;
+        width: 100px;
+        background-color: skyblue;
+    }
+</style>
+
+<body>
+    <div class="warp">
+        <div class="center">center</div>
+        <div class="left">left</div>
+        <div class="right">right</div>
+    </div>
+</body>
+
+</html>
