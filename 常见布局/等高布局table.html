@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>等高布局-table布局</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .center,
+        .left,
+        .right {
+            width: 33.3%;
+            text-align: center;
+            display: table-cell;
+            background-color: aquamarine;
+        }
+
+        .container {
+            display: table;
+            width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">111111111111</div>
+        <div class="center">22222222222222222222222222</div>
+        <div class="right">
+            333333333333333333333333333333333333333333333333
+            333333333333333333333333333333333333333333333333
+            333333333333333333333333333333333333333333333333
+        </div>
+    </div>
+</body>
+
+</html>
