@@ -1,0 +1,63 @@
+<html>
+<style>
+    .father {
+        position: relative;
+        width: 500px;
+        height: 300px;
+        border: 1px solid red;
+
+        /* 方案4：flex */
+        display: flex;
+        /*水平居中*/
+        justify-content: center;
+        /*垂直居中*/
+        align-items: center;
+
+        /* 方案5：table布局 */
+        /*水平居中 配合子级中的display: inline-block;*/
+        text-align: center;
+        /*垂直居中*/
+        display: table-cell;
+        vertical-align: middle;
+
+    }
+
+    .son {
+        /*公共部分*/
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: red;
+
+        /* 方案1：absolute+margin:auto */
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        /* 方案2：absolute+负margin */
+        top: 50%;
+        left: 50%;
+        margin-left: -子级width的一半;
+        margin-top: -子级height的一半;
+
+        /* 方案3：absolute+transfrom */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        /* 方案5：table布局 */
+        /*水平居中 配合父级中的text-align: center;*/
+        display: inline-block;
+
+    }
+</style>
+
+<body>
+    <div class="father">
+        <div class="son"></div>
+    </div>
+</body>
+
+</html>
