@@ -1,0 +1,36 @@
+@import url("./variable.less");
+
+.lessTree {
+    background-color: rgb(200, 40, 149);
+    width: 100px;
+    height: 100px;
+
+    .tree1(@first_width: 800px, @first_height: 500px) {
+        width: @first_width;
+        height: @first_height;
+
+        .tree2(@border_w: 1px, @border_shape: solid, @border_color: #000, @border_r: 5%) {
+            border: @border_w @border_shape @border_color;
+            border-radius: @border_r;
+        }
+    }
+}
+
+.selfBox(@_, @box_width: 100px, @box_height: 100px, @box_color: #000) {
+    width: @box_width;
+    height: @box_height;
+}
+
+.selfBox(color, @box_width: 100px, @box_height: 100px, @box_color: #000) {
+    background-color: @box_color;
+}
+
+.test2 {
+    .selfBox(color, 800px, 500px, lightgreen);
+}
+
+.test3 {
+    background-color: antiquewhite;
+    .lessTree .tree1;
+    .tree2()
+}
