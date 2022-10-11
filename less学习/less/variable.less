@@ -1,4 +1,43 @@
-@color: #999;
-@bgColor: skyblue;
-@width: 500px;
+// 值变量
+@width: 800px;
 @height: 500px;
+@fontSize: 50px;
+@color: red;
+@bgColor: skyblue;
+
+
+//选择器变量
+@testIdSelector: #test;
+@testClassSelector: .test;
+@testName: test;
+
+//属性变量
+@textAlign: text-align;
+@textAlignValue: center;
+
+//url变量
+@images: "../images";
+
+//声明变量
+@borderStyle: {
+    border: 2px solid black;
+    border-radius: 10%;
+}
+
+;
+
+@backgroundImg: {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-image: url("@{images}/test_less.jpg");
+}
+
+;
+
+@shapeStyle: {
+    width: @width;
+    height: @height;
+}
+
+;

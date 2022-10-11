@@ -1,8 +1,46 @@
-@import url(./variable.less);
+@import url("./variable.less");
 
 #warp {
+    position: relative;
     color: @color;
     background-color: @bgColor;
+    @shapeStyle();
+    @borderStyle();
+
+    &::before {
+        position: absolute;
+        content: "less is more";
+        @shapeStyle();
+        text-align: center;
+        line-height: 500px;
+        font-size: @fontSize ;
+    }
+
+    &:hover::before {
+        font-size: 10px;
+    }
+
+
+
+}
+
+
+
+.@{testName} {
     width: @width;
+}
+
+#@{testName} {
     height: @height;
+}
+
+@{testIdSelector} {
+    background-color: @bgColor;
+}
+
+@{testClassSelector} {
+    color: @color;
+    font-size: @fontSize;
+    @{textAlign}: @textAlignValue;
+    @backgroundImg();
 }
