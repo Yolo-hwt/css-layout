@@ -1,0 +1,43 @@
+//继承
+.animation {
+    width: 400px;
+    height: 250px;
+    color: red;
+    background-color: purple;
+
+}
+
+// .animation {
+//     & {
+//         transform: scale(2);
+//         transform-origin: top left;
+//     }
+// }
+
+.test4:extend(.animation) {}
+
+// 两种方式均可
+// .test4 {
+//     &:extend(.animation all)
+// }
+.grandF {
+    width: 800px;
+    height: 500px;
+    background-color: blue;
+
+    .father {
+        width: 600px;
+        height: 300px;
+        background-color: red;
+
+        .son {
+            .boss & {
+                border-radius: 10%;
+            }
+
+            width: 400px;
+            height: 200px;
+            background-color: lawngreen;
+        }
+    }
+}

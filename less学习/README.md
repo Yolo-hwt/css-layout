@@ -191,7 +191,7 @@ font-size:30px;
 }
 ```
 
-## 嵌套
+## 嵌套（&）
 
 1. **&**
 
@@ -236,18 +236,91 @@ font-size:30px;
 #warp:hover::after{...}
 ```
 
-## 混合
+2. **&的复用嵌套**
+
+```less
+// Multiple Parents `在这里插入代码片`
+.nav {
+    & + & {
+        margin: 10px;
+    }
+    & & {
+        padding: 10px;
+    }
+    && {
+        width: 20px;
+    }
+    &>& {
+        border: 1px solid red;
+    }
+    & , &bar {
+        position: relative;
+    }
+}
+//css
+.nav + .nav {
+  margin: 10px;
+}
+.nav .nav {
+  padding: 10px;
+}
+.nav.nav {
+  width: 20px;
+}
+.nav > .nav {
+  border: 1px solid red;
+}
+.nav,
+.navbar {
+  position: relative;
+}
+
+```
+
+
+
+3. **后置&巧用**
+
+```less
+// Change Selector Order
+.header {
+    .menu {
+        border-radius: 5px;
+        .no-border & {
+            background-image: url("border.png");
+        }
+    }
+}
+//css
+.header .menu {
+  border-radius: 5px;
+}
+.no-border .header .menu {
+  background-image: url("border.png");
+}
+
+```
+
+
+
+## 混合（mixins）
 
 - **无参数方法**
 
-这里注意区别变量和方法的区别
+这里注意区别**变量和方法的区别**
 
 变量以@开头来声明引入
 
-而方法以 `.` 或者 `#` 作为方法前缀，也就是我们所说的id选择器和类选择器都可以作为方法，两种调用方式，
+而方法以 `.` 或者 `#` 作为方法前缀，也就是我们所说的**id选择器和类选择器都可以作为方法**，两种**调用或声明**方式，
 
 1.  .name/#name
 2.  .name()/#name()
+
+两种方式作为声明有以下区别
+
+name：声明下的样式规则会被编译到css中
+
+name()：不会被编译输出
 
 ```less
 /* Less */
@@ -519,10 +592,11 @@ Less 并没有提供 for 循环功能，但这也难不倒 聪明的程序员，
 
 
 - **属性拼接方法**
+- 可以据此实现同属性间的层级聚合
 
 `+_` 代表的是 空格；`+` 代表的是 逗号。
 
-- 逗号
+- 逗号`+`
 
 ```less
 /* Less */
@@ -540,7 +614,7 @@ Less 并没有提供 for 循环功能，但这也难不倒 聪明的程序员，
 复制代码
 ```
 
-- 空格
+- 空格`+_`
 
 ```less
 /* Less */
@@ -557,3 +631,238 @@ Less 并没有提供 for 循环功能，但这也难不倒 聪明的程序员，
   transform: scale(2) rotate(15deg);
 }
 ```
+
+## 继承（extend）
+
+- **extend关键字**
+
+extend 是 Less 的一个伪类。它可**继承 所匹配声明中的全部样式**。
+
+基于匹配声明式的继承是一大优势，但同时也可能带来代码重复性的问题，对比方法则是使用自己的声明。所以根据场景，考虑使用即可
+
+**使用extend注意点**
+
+- 选择器和扩展之间 是允许有空格的：pre:hover :extend(div pre).
+
+- 可以有多个扩展: pre:hover:extend(div pre):extend(.bucket tr) - 注意这与 pre:hover:extend(div pre, .bucket tr)一样。
+
+- **扩展必须在最后** 后面的代码是不可以的: pre:hover:extend(div pre):nth-child(odd)，改为pre:hover:nth-child(odd):extend(div pre)
+
+- 如果一个规则集包含多个选择器，所有选择器都可以使用extend关键字。
+
+```less
+/* Less */
+.animation{
+    transition: all .3s ease-out;
+    .hide{
+      transform:scale(0);
+    }
+}
+#main{
+    &:extend(.animation);
+}
+#con{
+    &:extend(.animation .hide);
+}
+
+/* 生成后的 CSS */
+.animation,#main{
+  transition: all .3s ease-out;
+}
+.animation .hide , #con{
+    transform:scale(0);
+}
+```
+
+
+
+- **all 全局搜索替换**
+
+使用选择器匹配到的全部声明
+
+```less
+/* Less */
+#main{
+  width: 200px;
+}
+#main {
+  &:after {
+    content:"Less is good!";
+  }
+}
+#wrap:extend(#main all) {}
+//或者下面的方式
+/*#wrap{
+    &::extend(#main all)
+}*/
+
+/* 生成的 CSS */
+#main,#wrap{
+  width: 200px;
+}
+#main:after, #wrap:after {
+    content: "Less is good!";
+}
+```
+
+
+
+## 导入（import）
+
+1. 导入 less 文件 可省略后缀
+
+```less
+import "main"; 
+//等价于
+import "main.less";
+```
+
+1. `@import` 的位置可随意放置
+
+```less
+#main{
+  font-size:15px;
+}
+@import "style";
+```
+
+
+
+## reference
+
+使用@import (reference)导入外部文件，但不会把导入的文件 编译到最终输出中，只引用。
+
+只有使用extend或者mixins引入的样式规则会被编译进去
+
+可以理解为less通过reference弱引入然后根据extend和mixins捕获相关的样式，并提取，类似TreeShaking
+
+```less
+/* Less */
+@import (reference) "bootstrap.less"; //只做引入
+
+#wrap:extend(.navbar all){}			//bootstrap.less中和.navbar相关的所有选择器的样式被添加到#warp选择器，并被编译到最终输出
+```
+
+
+
+## once
+
+> @import语句的默认行为。这表明相同的文件只会被导入一次，而随后的导入文件的重复代码都不会解析。
+
+```less
+@import (once) "foo.less";
+@import (once) "foo.less"; // this statement will be ignored
+```
+
+
+
+## multiple
+
+> 使用@import (multiple)允许导入多个同名文件。
+
+```less
+/* Less */
+
+// file: foo.less
+.a {
+  color: green;
+}
+
+// file: main.less
+@import (multiple) "foo.less";
+@import (multiple) "foo.less";
+
+/* 生成后的 CSS */
+.a {
+  color: green;
+}
+.a {
+  color: green;
+}
+```
+
+
+
+## 函数
+
+如果你想了解更多，可以去官网的[函数链接](https://link.juejin.cn/?target=http%3A%2F%2Flesscss.cn%2Ffunctions%2F)
+
+### 类型判断
+
+- **isnumber**
+
+> 判断给定的值 是否 是一个数字。
+
+```less
+isnumber(#ff0);     // false
+isnumber(blue);     // false
+isnumber("string"); // false
+isnumber(1234);     // true
+isnumber(56px);     // true
+isnumber(7.8%);     // true
+isnumber(keyword);  // false
+isnumber(url(...)); // false
+复制代码
+```
+
+- **iscolor**
+
+> 判断给定的值 是否 是一个颜色。
+
+- **isurl**
+
+> 判断给定的值 是否 是一个 url 。
+
+### 颜色操作
+
+- saturate
+
+> 增加一定数值的颜色饱和度。
+
+- lighten
+
+> 增加一定数值的颜色亮度。
+
+- darken
+
+> 降低一定数值的颜色亮度。
+
+- fade
+
+> 给颜色设定一定数值的透明度。
+
+- mix
+
+> 根据比例混合两种颜色。
+
+### 数学
+
+- ceil
+
+> 向上取整。
+
+- floor
+
+> 向下取整。
+
+- percentage
+
+> 将浮点数转换为百分比字符串。
+
+- round
+
+> 四舍五入。
+
+- sqrt
+
+> 计算一个数的平方根。
+
+- abs
+
+> 计算数字的绝对值，原样保持单位。
+
+- pow
+
+> 计算一个数的乘方。
+
+## 其他
